@@ -37,6 +37,71 @@
       line-height: 1.55;
     }
 
+    /* Full-Screen Password Lock Overlay */
+    .lock-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .lock-screen.hidden {
+      display: none;
+    }
+
+    .lock-card {
+      background: #ffffff;
+      border-radius: 16px;
+      max-width: 460px;
+      width: 100%;
+      padding: 32px 28px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    }
+
+    .lock-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      margin: 0 auto 14px;
+    }
+
+    .lock-title {
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .lock-sub {
+      text-align: center;
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      margin-bottom: 22px;
+    }
+
+    .lock-err {
+      display: none;
+      background: var(--danger-soft);
+      color: var(--danger);
+      border: 1px solid #fecaca;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
     /* Top Bar */
     .topbar {
       position: sticky;
@@ -68,10 +133,10 @@
 
     .topbar-badge {
       font-size: 0.75rem;
-      background: rgba(59, 130, 246, 0.25);
-      color: #93c5fd;
-      border: 1px solid rgba(147, 197, 253, 0.35);
-      padding: 2px 8px;
+      background: rgba(16, 185, 129, 0.22);
+      color: #6ee7b7;
+      border: 1px solid rgba(110, 231, 183, 0.35);
+      padding: 2px 9px;
       border-radius: 6px;
     }
 
@@ -84,6 +149,7 @@
     .btn {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
       padding: 7px 14px;
       border-radius: 8px;
@@ -190,40 +256,13 @@
       border-radius: 10px;
     }
 
-    /* Auth Bar */
-    .auth-card {
-      background: var(--surface);
-      border: 1px solid var(--border-light);
-      border-radius: var(--radius);
-      padding: 16px 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-    }
-
-    .auth-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .auth-input {
-      flex: 1;
-      min-width: 260px;
-      padding: 8px 12px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
-    }
-
     .status-banner {
       display: none;
-      padding: 10px 14px;
-      border-radius: 8px;
+      padding: 12px 16px;
+      border-radius: 10px;
       font-weight: 600;
-      font-size: 0.85rem;
-      margin-top: 12px;
+      font-size: 0.86rem;
+      margin-bottom: 18px;
     }
 
     .status-banner.info { display: block; background: var(--accent-soft); color: var(--accent); border: 1px solid #bfdbfe; }
@@ -282,13 +321,13 @@
       color: var(--text-secondary);
     }
 
-    input[type="text"], input[type="email"], select, textarea {
+    input[type="text"], input[type="password"], input[type="email"], select, textarea {
       width: 100%;
-      padding: 8px 11px;
+      padding: 9px 12px;
       border: 1px solid var(--border);
-      border-radius: 7px;
+      border-radius: 8px;
       font-family: inherit;
-      font-size: 0.86rem;
+      font-size: 0.88rem;
       color: var(--text);
       background: #fff;
       transition: border-color 0.15s ease;
@@ -297,7 +336,7 @@
     input:focus, select:focus, textarea:focus {
       outline: none;
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
     }
 
     textarea {
@@ -359,7 +398,7 @@
       border: 1px solid var(--border-light);
       border-radius: 8px;
       padding: 10px 14px;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
     }
 
     details.guide-details summary {
@@ -377,20 +416,78 @@
 </head>
 <body>
 
+  <!-- Full-Screen Password Lock Screen -->
+  <div class="lock-screen" id="lockScreen">
+    <div class="lock-card">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title" id="lockTitle">管理员密码登录</div>
+      <div class="lock-sub" id="lockSub">请输入您的管理员密码以解锁学术主页后台</div>
+      <div class="lock-err" id="lockErr"></div>
+
+      <!-- Mode A: Everyday Password Login (shown when encrypted vault exists) -->
+      <div id="loginBox" style="display:none;">
+        <div class="form-group">
+          <label>管理员密码 (Password)</label>
+          <input type="password" id="loginPwd" placeholder="请输入您的管理员密码" onkeydown="if(event.key==='Enter')unlockWithPassword()" />
+        </div>
+        <button class="btn btn-primary" style="width:100%; padding:10px; margin-top:6px;" onclick="unlockWithPassword()">
+          🔓 解锁进入管理后台
+        </button>
+        <div style="display:flex; justify-content:space-between; margin-top:14px; font-size:0.78rem;">
+          <a href="index.html" style="color:var(--text-muted); text-decoration:none;">← 返回学术主页</a>
+          <a href="javascript:void(0)" onclick="showSetupBox(true)" style="color:var(--accent); text-decoration:none;">重置密码 / 重新绑定</a>
+        </div>
+      </div>
+
+      <!-- Mode B: First-Time Password Creation (encrypts credential with AES-256-GCM into cloud vault) -->
+      <div id="setupBox" style="display:none;">
+        <div class="form-group">
+          <label>1. 设置您的后台登录密码（以后在任何电脑/手机上只需输入此密码）</label>
+          <input type="password" id="setupPwd1" placeholder="设置一个好记的管理员密码（至少 6 位）" />
+        </div>
+        <div class="form-group">
+          <label>2. 确认管理员密码</label>
+          <input type="password" id="setupPwd2" placeholder="再次输入管理员密码" />
+        </div>
+        <div class="form-group">
+          <label>3. 一次性绑定 GitHub 底层写入凭证（将被您的密码 AES-256 加密封存）</label>
+          <input type="password" id="setupToken" placeholder="粘贴一次 github_pat_... 或 ghp_..." />
+          <details class="guide-details">
+            <summary>💡 为什么首次设置密码需要绑定一次？如何 30 秒获取？</summary>
+            <ol style="margin-top:6px; padding-left:18px; color:var(--text-secondary); display:flex; flex-direction:column; gap:4px;">
+              <li>由于网站托管在 GitHub 官方服务器上，底层保存文件需要向 GitHub 验证身份。</li>
+              <li>您只需在此绑定一次，系统会用您上面设置的<strong>管理员密码</strong>将其进行 <strong>AES-256-GCM 高强度加密</strong>并存入云端密码箱。<strong>以后您在任何电脑、手机上打开后台，都只需要输入您设置的密码即可登录和发布！</strong></li>
+              <li>获取方式：打开 <a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener"><strong>GitHub Tokens 设置页</strong></a> → 点击 <strong>Generate new token</strong> → 名称填 <code>homepage</code> → Repository access 选 <strong>Only select repositories</strong> 并勾选 <code>yicren66/yicren66.github.io</code> → 下方 <strong>Repository permissions → Contents</strong> 改为 <strong>Read and write</strong> → 点击底部 <strong>Generate token</strong> 复制粘贴到上方即可。</li>
+            </ol>
+          </details>
+        </div>
+        <button class="btn btn-primary" id="setupBtn" style="width:100%; padding:10px; margin-top:6px;" onclick="createPasswordVault()">
+          🔐 加密保存密码并进入后台
+        </button>
+        <div style="display:flex; justify-content:space-between; margin-top:14px; font-size:0.78rem;">
+          <a href="index.html" style="color:var(--text-muted); text-decoration:none;">← 返回学术主页</a>
+          <a href="javascript:void(0)" id="backToLoginLink" onclick="showSetupBox(false)" style="color:var(--accent); text-decoration:none; display:none;">返回密码登录</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Top Bar -->
   <header class="topbar">
     <div class="topbar-left">
       <div class="topbar-title">⚙️ 学术主页可视化管理后台</div>
-      <span class="topbar-badge">yicren66/yicren66.github.io</span>
+      <span class="topbar-badge">🔓 已通过密码验证解锁</span>
     </div>
     <div class="topbar-actions">
       <a class="btn btn-ghost" href="index.html" target="_blank">👀 查看主页</a>
+      <button class="btn btn-ghost" onclick="openChangePassword()">🔑 修改密码</button>
       <button class="btn btn-ghost" onclick="exportJson()">📥 导出备份</button>
       <label class="btn btn-ghost" style="margin:0; cursor:pointer;">
         📤 导入 JSON <input type="file" accept=".json" style="display:none" onchange="importJson(event)" />
       </label>
+      <button class="btn btn-ghost" onclick="lockSession()">🔒 锁定退出</button>
       <button class="btn btn-success" id="saveGithubBtn" onclick="saveToGitHub()">
-        💾 保存并发布到 GitHub
+        💾 保存并发布到主页
       </button>
     </div>
   </header>
@@ -428,26 +525,7 @@
 
     <!-- Right Content -->
     <div>
-      <!-- GitHub Token Auth Box -->
-      <div class="auth-card">
-        <div class="auth-row">
-          <strong style="font-size:0.86rem;">🔑 GitHub 授权 Token：</strong>
-          <input type="password" id="ghToken" class="auth-input" placeholder="粘贴您的 GitHub Personal Access Token (ghp_... 或 github_pat_...)" />
-          <button class="btn btn-outline btn-sm" onclick="saveTokenLocal()">记住 Token</button>
-          <button class="btn btn-outline btn-sm" onclick="clearTokenLocal()">清除</button>
-        </div>
-        <details class="guide-details">
-          <summary>💡 首次使用：如何花 30 秒获取您的专属 GitHub Token？（仅您本人可修改网站）</summary>
-          <ol style="margin-top:8px; padding-left:20px; color:var(--text-secondary); display:flex; flex-direction:column; gap:4px;">
-            <li>点击打开 GitHub 官方设置页：<a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener"><strong>Fine-grained personal access tokens</strong></a> → 点击右上角 <strong>Generate new token</strong>。</li>
-            <li><strong>Token name</strong> 随便填（如 <code>homepage-admin</code>），<strong>Expiration</strong> 选择有效期（如 90 days 或 Custom）。</li>
-            <li><strong>Repository access</strong> 选择 <strong>Only select repositories</strong> → 勾选 <code>yicren66/yicren66.github.io</code>。</li>
-            <li>展开下方 <strong>Permissions → Repository permissions</strong> → 找到 <strong>Contents</strong>，将权限改为 <strong>Read and write</strong>。</li>
-            <li>滑到底部点击 <strong>Generate token</strong>，复制生成的 <code>github_pat_...</code> 粘贴到上方输入框并点击“记住 Token”。（Token 仅保存在您当前浏览器的本地存储中，不会上传到代码仓库，外人访问此页面无法修改您的主页！）</li>
-          </ol>
-        </details>
-        <div id="statusBanner" class="status-banner"></div>
-      </div>
+      <div id="statusBanner" class="status-banner"></div>
 
       <!-- Panel 1: Profile -->
       <section id="panel-profile" class="panel active">
@@ -524,24 +602,163 @@
     const DATA_PATH = 'data/site-data.json';
 
     let siteData = null;
+    let unlockedToken = ''; // Held only in memory after password unlock
+
+    // =========================================================================
+    // Web Crypto API: AES-256-GCM + PBKDF2 Password Vault
+    // =========================================================================
+    function bufToB64(buf) {
+      const bytes = new Uint8Array(buf);
+      let bin = '';
+      for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+      return btoa(bin);
+    }
+
+    function b64ToBuf(b64) {
+      const bin = atob(b64);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      return bytes.buffer;
+    }
+
+    async function deriveKey(password, saltBuf) {
+      const enc = new TextEncoder();
+      const keyMat = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
+      return crypto.subtle.deriveKey(
+        { name: 'PBKDF2', salt: saltBuf, iterations: 100000, hash: 'SHA-256' },
+        keyMat,
+        { name: 'AES-GCM', length: 256 },
+        false,
+        ['encrypt', 'decrypt']
+      );
+    }
+
+    async function encryptWithPassword(plainToken, password) {
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const key = await deriveKey(password, salt.buffer);
+      const encoded = new TextEncoder().encode(plainToken);
+      const cipherBuf = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, encoded);
+      return {
+        v: 1,
+        salt: bufToB64(salt.buffer),
+        iv: bufToB64(iv.buffer),
+        ct: bufToB64(cipherBuf)
+      };
+    }
+
+    async function decryptWithPassword(vault, password) {
+      const saltBuf = b64ToBuf(vault.salt);
+      const ivBuf = b64ToBuf(vault.iv);
+      const ctBuf = b64ToBuf(vault.ct);
+      const key = await deriveKey(password, saltBuf);
+      const plainBuf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: new Uint8Array(ivBuf) }, key, ctBuf);
+      return new TextDecoder().decode(plainBuf);
+    }
+
+    function showLockError(msg) {
+      const el = document.getElementById('lockErr');
+      if (!msg) {
+        el.style.display = 'none';
+        el.textContent = '';
+      } else {
+        el.style.display = 'block';
+        el.textContent = msg;
+      }
+    }
+
+    function showSetupBox(isSetup) {
+      showLockError('');
+      const hasVault = siteData && siteData.authVault && siteData.authVault.ct;
+      document.getElementById('backToLoginLink').style.display = hasVault ? 'inline' : 'none';
+      if (isSetup) {
+        document.getElementById('lockTitle').textContent = hasVault ? '重置管理员密码' : '首次设置管理员密码';
+        document.getElementById('lockSub').textContent = '设置您的专属登录密码，设置后在任何设备上只需输入密码即可管理主页';
+        document.getElementById('loginBox').style.display = 'none';
+        document.getElementById('setupBox').style.display = 'block';
+        if (unlockedToken) {
+          document.getElementById('setupToken').value = unlockedToken;
+        }
+      } else {
+        document.getElementById('lockTitle').textContent = '管理员密码登录';
+        document.getElementById('lockSub').textContent = '请输入您的管理员密码以解锁学术主页后台';
+        document.getElementById('setupBox').style.display = 'none';
+        document.getElementById('loginBox').style.display = 'block';
+        setTimeout(() => document.getElementById('loginPwd').focus(), 50);
+      }
+    }
+
+    async function unlockWithPassword() {
+      showLockError('');
+      const pwd = document.getElementById('loginPwd').value;
+      if (!pwd) return showLockError('请输入管理员密码');
+      if (!siteData || !siteData.authVault) {
+        return showSetupBox(true);
+      }
+      try {
+        const token = await decryptWithPassword(siteData.authVault, pwd);
+        if (!token) throw new Error('Invalid');
+        unlockedToken = token;
+        sessionStorage.setItem('yicren66_unlocked_token', token);
+        document.getElementById('lockScreen').classList.add('hidden');
+        document.getElementById('loginPwd').value = '';
+      } catch (e) {
+        showLockError('❌ 密码错误，请重新输入！');
+      }
+    }
+
+    async function createPasswordVault() {
+      showLockError('');
+      const p1 = document.getElementById('setupPwd1').value;
+      const p2 = document.getElementById('setupPwd2').value;
+      const token = document.getElementById('setupToken').value.trim();
+
+      if (!p1 || p1.length < 4) return showLockError('请设置至少 4 位的管理员密码');
+      if (p1 !== p2) return showLockError('两次输入的管理员密码不一致');
+      if (!token) return showLockError('请粘贴一次 GitHub 写入凭证以完成加密绑定');
+
+      const btn = document.getElementById('setupBtn');
+      const oldText = btn.textContent;
+      try {
+        btn.disabled = true;
+        btn.textContent = '⏳ 正在验证并加密保存密码...';
+
+        // Verify token has write access & encrypt vault into siteData
+        const vault = await encryptWithPassword(token, p1);
+        siteData.authVault = vault;
+        unlockedToken = token;
+
+        const jsonStr = JSON.stringify(siteData, null, 2);
+        await githubPutFile(DATA_PATH, utf8ToBase64(jsonStr), 'Configure AES-256 encrypted admin password vault');
+
+        sessionStorage.setItem('yicren66_unlocked_token', token);
+        document.getElementById('lockScreen').classList.add('hidden');
+        showStatus('🎉 管理员密码设置成功！以后您在任何电脑或手机上打开后台，只需输入刚才设置的密码即可直接登录和发布。', 'success');
+      } catch (e) {
+        showLockError('❌ 绑定失败：' + e.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = oldText;
+      }
+    }
+
+    function openChangePassword() {
+      document.getElementById('lockScreen').classList.remove('hidden');
+      showSetupBox(true);
+    }
+
+    function lockSession() {
+      unlockedToken = '';
+      sessionStorage.removeItem('yicren66_unlocked_token');
+      document.getElementById('lockScreen').classList.remove('hidden');
+      const hasVault = siteData && siteData.authVault && siteData.authVault.ct;
+      showSetupBox(!hasVault);
+    }
 
     function showStatus(msg, type = 'info') {
       const el = document.getElementById('statusBanner');
       el.className = 'status-banner ' + type;
       el.innerHTML = msg;
-    }
-
-    function saveTokenLocal() {
-      const val = document.getElementById('ghToken').value.trim();
-      if (!val) return showStatus('请先输入 GitHub Token', 'error');
-      localStorage.setItem('yicren66_gh_token', val);
-      showStatus('✓ Token 已保存在当前浏览器本地存储中', 'success');
-    }
-
-    function clearTokenLocal() {
-      localStorage.removeItem('yicren66_gh_token');
-      document.getElementById('ghToken').value = '';
-      showStatus('已清除本地保存的 Token', 'info');
     }
 
     function switchTab(name, btn) {
@@ -661,12 +878,12 @@
           `).join('')}
         </div>
 
-        <h4 style="margin: 20px 0 10px; font-size:0.9rem;">📤 直接上传并替换头像或简历 PDF（将直接上传至 GitHub 仓库）</h4>
+        <h4 style="margin: 20px 0 10px; font-size:0.9rem;">📤 直接上传并替换头像或简历 PDF</h4>
         <div class="form-grid">
           <div class="upload-box">
             <div style="flex:1;">
               <div style="font-weight:600; font-size:0.84rem;">更新个人头像 (assets/img/avatar.png)</div>
-              <div class="help-tip">选择 PNG/JPG 图片后自动上传到 GitHub</div>
+              <div class="help-tip">选择 PNG/JPG 图片后自动上传替换</div>
             </div>
             <input type="file" accept="image/*" onchange="uploadAssetFile(event, 'assets/img/avatar.png', 'avatarUrl')" />
           </div>
@@ -825,7 +1042,7 @@
               <input type="text" id="pub-thumb-${i}" value="${esc(pub.thumb)}" oninput="siteData.publications[${i}].thumb=this.value" />
             </div>
             <div class="form-group">
-              <label>或者直接上传新配图至 GitHub</label>
+              <label>或者直接上传新配图</label>
               <input type="file" accept="image/*" onchange="uploadPubThumb(event, ${i})" />
             </div>
             <div class="form-group full" style="margin-bottom:0;">
@@ -1085,9 +1302,13 @@
       const reader = new FileReader();
       reader.onload = () => {
         try {
-          siteData = JSON.parse(reader.result);
+          const imported = JSON.parse(reader.result);
+          if (siteData && siteData.authVault && !imported.authVault) {
+            imported.authVault = siteData.authVault;
+          }
+          siteData = imported;
           renderAllEditors();
-          showStatus('✓ 已成功导入 JSON 数据，点击右上角“保存并发布到 GitHub”即可生效', 'success');
+          showStatus('✓ 已成功导入 JSON 数据，点击右上角“保存并发布到主页”即可生效', 'success');
         } catch (e) {
           showStatus('JSON 格式解析失败: ' + e.message, 'error');
         }
@@ -1104,17 +1325,16 @@
     }
 
     async function githubPutFile(path, base64Content, commitMsg) {
-      const token = document.getElementById('ghToken').value.trim();
-      if (!token) {
-        throw new Error('请先在上方输入框填写您的 GitHub Personal Access Token！');
+      if (!unlockedToken) {
+        lockSession();
+        throw new Error('会话已锁定，请先输入管理员密码解锁！');
       }
       const apiUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`;
       const headers = {
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${unlockedToken}`,
         'Accept': 'application/vnd.github+json'
       };
 
-      // Get current file SHA if exists
       let sha = undefined;
       const getRes = await fetch(apiUrl + '?t=' + Date.now(), { headers });
       if (getRes.ok) {
@@ -1146,12 +1366,11 @@
       const oldText = btn.textContent;
       try {
         btn.disabled = true;
-        btn.textContent = '⏳ 正在同步到 GitHub...';
-        showStatus('正在将最新数据提交到 GitHub 仓库 yicren66/yicren66.github.io...', 'info');
+        btn.textContent = '⏳ 正在发布...';
+        showStatus('正在将最新数据同步到云端主页 yicren66.github.io...', 'info');
         const jsonStr = JSON.stringify(siteData, null, 2);
         await githubPutFile(DATA_PATH, utf8ToBase64(jsonStr), 'Update academic homepage data via Web Admin');
-        localStorage.setItem('yicren66_gh_token', document.getElementById('ghToken').value.trim());
-        showStatus('🎉 保存并发布成功！GitHub Pages 正在自动刷新，约 20~30 秒后刷新主页即可看到最新内容。', 'success');
+        showStatus('🎉 保存并发布成功！约 20~30 秒后刷新主页即可看到最新内容。', 'success');
       } catch (e) {
         showStatus('❌ 发布失败：' + e.message, 'error');
       } finally {
@@ -1172,7 +1391,7 @@
           if (profileField && siteData.profile) {
             siteData.profile[profileField] = targetPath + '?v=' + Date.now();
           }
-          showStatus(`✓ 文件 ${targetPath} 上传成功！别忘了点击右上角“保存并发布到 GitHub”保存配置。`, 'success');
+          showStatus(`✓ 文件 ${targetPath} 上传成功！别忘了点击右上角“保存并发布到主页”保存配置。`, 'success');
         } catch (e) {
           showStatus('❌ 文件上传失败：' + e.message, 'error');
         }
@@ -1194,7 +1413,7 @@
           siteData.publications[idx].thumb = targetPath;
           const inp = document.getElementById('pub-thumb-' + idx);
           if (inp) inp.value = targetPath;
-          showStatus(`✓ 论文配图已上传至 ${targetPath}！请点击右上角“保存并发布到 GitHub”。`, 'success');
+          showStatus(`✓ 论文配图已上传至 ${targetPath}！请点击右上角“保存并发布到主页”。`, 'success');
         } catch (e) {
           showStatus('❌ 配图上传失败：' + e.message, 'error');
         }
@@ -1204,17 +1423,25 @@
 
     // Initialize
     window.addEventListener('DOMContentLoaded', () => {
-      const savedToken = localStorage.getItem('yicren66_gh_token');
-      if (savedToken) document.getElementById('ghToken').value = savedToken;
+      const cachedSession = sessionStorage.getItem('yicren66_unlocked_token');
 
       fetch(DATA_PATH + '?t=' + Date.now())
         .then(r => r.json())
         .then(data => {
           siteData = data;
           renderAllEditors();
+
+          const hasVault = siteData && siteData.authVault && siteData.authVault.ct;
+          if (cachedSession) {
+            unlockedToken = cachedSession;
+            document.getElementById('lockScreen').classList.add('hidden');
+          } else {
+            document.getElementById('lockScreen').classList.remove('hidden');
+            showSetupBox(!hasVault);
+          }
         })
         .catch(err => {
-          showStatus('加载 data/site-data.json 失败：' + err.message, 'error');
+          showLockError('加载 data/site-data.json 失败：' + err.message);
         });
     });
   </script>
