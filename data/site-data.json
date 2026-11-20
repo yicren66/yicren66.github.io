@@ -16,14 +16,37 @@
     "avatarUrl": "assets/img/avatar.png",
     "cvUrl": "assets/pdf/CV-RenYichi.pdf",
     "stats": [
-      { "num": "2+1", "labelEn": "Papers", "labelZh": "学术论文" },
-      { "num": "3", "labelEn": "Patent & IP", "labelZh": "专利/软著" },
-      { "num": "Top 19%", "labelEn": "GPA 3.3/4", "labelZh": "专业排名" }
+      {
+        "num": "2+1",
+        "labelEn": "Papers",
+        "labelZh": "学术论文"
+      },
+      {
+        "num": "3",
+        "labelEn": "Patent & IP",
+        "labelZh": "专利/软著"
+      },
+      {
+        "num": "Top 19%",
+        "labelEn": "GPA 3.3/4",
+        "labelZh": "专业排名"
+      }
     ],
     "skills": [
-      "PyTorch", "MobileNetV4", "YOLOv8", "PointNet++", "Transformer",
-      "XGBoost", "OpenCV", "Python", "C/C++", "FastAPI",
-      "Spring Boot", "Vue 3", "Neo4j", "LLM Fine-Tuning"
+      "PyTorch",
+      "MobileNetV4",
+      "YOLOv8",
+      "PointNet++",
+      "Transformer",
+      "XGBoost",
+      "OpenCV",
+      "Python",
+      "C/C++",
+      "FastAPI",
+      "Spring Boot",
+      "Vue 3",
+      "Neo4j",
+      "LLM Fine-Tuning"
     ]
   },
   "about": {
@@ -254,5 +277,11 @@
       "nameZh": "西北农林科技大学 <strong>专业优秀奖学金</strong>（连续两年）",
       "year": "2023, 2024"
     }
-  ]
+  ],
+  "authVault": {
+    "v": 1,
+    "salt": "4BPFpjRfd0i1WU5YEAHzHw==",
+    "iv": "qG7OtTPP1ie2YcMn",
+    "ct": "BjXPxhBY0BNwiEnnY3SUfOKhZyLquaZ/XsSrQh8XrtY8BK54EM31kI8rXWu6ONDQHAFrmzCwY9ARam4OX4PABShbtOcR4JbOazmwSAJEcDdFXfVAWSJVYpOt8H5ITac1XvS+ojnWEeQIbHvcqQ=="
+  }
 }
