@@ -1388,7 +1388,10 @@
   </div>
 
   <footer>
-    <div>© 2026 Yichi Ren (任奕驰) · Hosted on <a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages</a> (<a href="https://github.com/yicren66/yicren66.github.io" target="_blank" rel="noopener">yicren66.github.io</a>)</div>
+    <div>
+      © 2026 Yichi Ren (任奕驰) · Hosted on <a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages</a> (<a href="https://github.com/yicren66/yicren66.github.io" target="_blank" rel="noopener">yicren66.github.io</a>)
+      · <a href="admin.html" style="color: var(--text-muted); font-weight: 500;">⚙️ 管理后台 (Admin)</a>
+    </div>
   </footer>
 
   <!-- BibTeX Modal -->
@@ -1449,6 +1452,223 @@
         setTimeout(() => { btn.textContent = old; }, 1600);
       });
     }
+
+    // Dynamic rendering from data/site-data.json (updated via admin.html)
+    function renderSiteData(d) {
+      if (!d) return;
+      // 1. Profile
+      if (d.profile) {
+        const p = d.profile;
+        const avImg = document.querySelector('.avatar-wrap img');
+        if (avImg && p.avatarUrl) avImg.src = p.avatarUrl;
+        const pName = document.querySelector('.profile-name');
+        if (pName && p.name) pName.textContent = p.name;
+        const pNameCn = document.querySelector('.profile-name-cn');
+        if (pNameCn && p.nameCn) pNameCn.textContent = p.nameCn;
+        const pRole = document.querySelector('.profile-role');
+        if (pRole) pRole.innerHTML = `<span class="lang-en">${p.roleEn || ''}</span><span class="lang-zh">${p.roleZh || ''}</span>`;
+        const pUniv = document.querySelector('.profile-univ');
+        if (pUniv) pUniv.innerHTML = `<span class="lang-en">${p.univEn || ''}</span><span class="lang-zh">${p.univZh || ''}</span>`;
+        const cvLink = document.querySelector('.action-btns .btn-primary');
+        if (cvLink && p.cvUrl) cvLink.href = p.cvUrl;
+        const ghLink = document.querySelector('.action-btns .btn-outline');
+        if (ghLink && p.github) ghLink.href = p.github;
+
+        if (Array.isArray(p.stats)) {
+          const sg = document.querySelector('.stats-grid');
+          if (sg) {
+            sg.innerHTML = p.stats.map(s => `
+              <div>
+                <div class="stat-num">${s.num || ''}</div>
+                <div class="stat-label"><span class="lang-en">${s.labelEn || ''}</span><span class="lang-zh">${s.labelZh || ''}</span></div>
+              </div>
+            `).join('');
+          }
+        }
+
+        const infoList = document.querySelector('.info-list');
+        if (infoList) {
+          infoList.innerHTML = `
+            <li><span class="info-icon">📍</span><span><span class="lang-en">${p.locationEn || ''}</span><span class="lang-zh">${p.locationZh || ''}</span></span></li>
+            <li><span class="info-icon">✉️</span><a href="mailto:${p.email || ''}">${p.email || ''}</a></li>
+            <li><span class="info-icon">🔗</span><a href="${p.github || '#'}" target="_blank" rel="noopener">${p.githubDisplay || p.github || ''}</a></li>
+            <li><span class="info-icon">🌐</span><span>${p.languageScore || ''}</span></li>
+          `;
+        }
+
+        if (Array.isArray(p.skills)) {
+          const st = document.querySelector('.skill-tags');
+          if (st) {
+            st.innerHTML = p.skills.map(sk => `<span class="skill-tag">${sk}</span>`).join('');
+          }
+        }
+      }
+
+      // 2. About
+      if (d.about) {
+        const abSec = document.getElementById('about');
+        if (abSec) {
+          const sub = abSec.querySelector('.section-subtitle');
+          if (sub && d.profile && d.profile.period) sub.textContent = d.profile.period;
+          const bioEn = abSec.querySelector('.bio-text.lang-en');
+          if (bioEn && Array.isArray(d.about.paragraphsEn)) {
+            bioEn.innerHTML = d.about.paragraphsEn.map(p => `<p>${p}</p>`).join('');
+          }
+          const bioZh = abSec.querySelector('.bio-text.lang-zh');
+          if (bioZh && Array.isArray(d.about.paragraphsZh)) {
+            bioZh.innerHTML = d.about.paragraphsZh.map(p => `<p>${p}</p>`).join('');
+          }
+          const ig = abSec.querySelector('.interest-grid');
+          if (ig && Array.isArray(d.about.interests)) {
+            ig.innerHTML = d.about.interests.map(it => `
+              <div class="interest-item">
+                <div class="interest-title"><span class="lang-en">${it.titleEn || ''}</span><span class="lang-zh">${it.titleZh || ''}</span></div>
+                <div class="interest-desc"><span class="lang-en">${it.descEn || ''}</span><span class="lang-zh">${it.descZh || ''}</span></div>
+              </div>
+            `).join('');
+          }
+        }
+      }
+
+      // 3. News
+      if (Array.isArray(d.news)) {
+        const nl = document.querySelector('#news .news-list');
+        if (nl) {
+          nl.innerHTML = d.news.map(n => `
+            <li class="news-item">
+              <span class="news-date">${n.date || ''}</span>
+              <div class="news-content">
+                <span class="lang-en">${n.contentEn || ''}</span>
+                <span class="lang-zh">${n.contentZh || ''}</span>
+              </div>
+            </li>
+          `).join('');
+        }
+      }
+
+      // 4. Publications
+      if (Array.isArray(d.publications)) {
+        const pl = document.querySelector('#publications .pub-list');
+        if (pl) {
+          pl.innerHTML = d.publications.map((pub, idx) => {
+            const key = pub.id || ('pub_' + idx);
+            if (pub.bibtex) BIB_ENTRIES[key] = pub.bibtex;
+            return `
+              <article class="pub-card">
+                <div class="pub-thumb">
+                  <img src="${pub.thumb || 'assets/img/pub-apple-mobilenetv4.png'}" alt="${pub.title || ''}" />
+                </div>
+                <div class="pub-body">
+                  <div>
+                    <div class="pub-badges">
+                      ${pub.badge1 ? `<span class="badge ${pub.badge1Type || 'badge-conf'}">${pub.badge1}</span>` : ''}
+                      ${pub.badge2 ? `<span class="badge ${pub.badge2Type || 'badge-q1'}">${pub.badge2}</span>` : ''}
+                    </div>
+                    <h3 class="pub-title" style="margin-top:6px;">${pub.title || ''}</h3>
+                    <div class="pub-authors" style="margin-top:4px;">${pub.authorsHtml || ''}</div>
+                    <div class="pub-venue" style="margin-top:3px;">${pub.venue || ''}</div>
+                  </div>
+                  <div class="pub-links">
+                    ${pub.doiUrl ? `<a class="pub-btn" href="${pub.doiUrl}" target="_blank" rel="noopener">🔗 DOI / Paper</a>` : ''}
+                    ${pub.bibtex ? `<button class="pub-btn" onclick="openBib('${key}')">📋 BibTeX</button>` : ''}
+                  </div>
+                </div>
+              </article>
+            `;
+          }).join('');
+        }
+      }
+
+      // 5. Patents & IP
+      if (Array.isArray(d.patents)) {
+        const ipl = document.querySelector('#patents .ip-list');
+        if (ipl) {
+          ipl.innerHTML = d.patents.map(pt => `
+            <div class="ip-item">
+              <div class="ip-header">
+                <div class="ip-title">
+                  <span class="lang-en">${pt.titleEn || ''}</span>
+                  <span class="lang-zh">${pt.titleZh || ''}</span>
+                </div>
+                <span class="ip-code">${pt.code || ''}</span>
+              </div>
+              <div class="ip-desc">
+                <span class="lang-en">${pt.descEn || ''}</span>
+                <span class="lang-zh">${pt.descZh || ''}</span>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+
+      // 6. Research Experience
+      if (Array.isArray(d.research)) {
+        const rl = document.querySelector('#research .exp-list');
+        if (rl) {
+          rl.innerHTML = d.research.map(r => `
+            <div class="exp-item">
+              <div class="exp-top">
+                <div class="exp-title">
+                  <span class="lang-en">${r.titleEn || ''}</span>
+                  <span class="lang-zh">${r.titleZh || ''}</span>
+                </div>
+                <span class="exp-period">${r.period || ''}</span>
+              </div>
+              <div class="exp-meta">
+                <span class="lang-en">${r.metaEn || ''}</span>
+                <span class="lang-zh">${r.metaZh || ''}</span>
+              </div>
+              <ul class="exp-bullets lang-en">${(r.bulletsEn || []).map(b => `<li>${b}</li>`).join('')}</ul>
+              <ul class="exp-bullets lang-zh">${(r.bulletsZh || []).map(b => `<li>${b}</li>`).join('')}</ul>
+            </div>
+          `).join('');
+        }
+      }
+
+      // 7. Internships & Awards
+      if (Array.isArray(d.internships)) {
+        const il = document.querySelector('#experience .exp-list');
+        if (il) {
+          il.innerHTML = d.internships.map(r => `
+            <div class="exp-item">
+              <div class="exp-top">
+                <div class="exp-title">
+                  <span class="lang-en">${r.titleEn || ''}</span>
+                  <span class="lang-zh">${r.titleZh || ''}</span>
+                </div>
+                <span class="exp-period">${r.period || ''}</span>
+              </div>
+              <div class="exp-meta">
+                <span class="lang-en">${r.metaEn || ''}</span>
+                <span class="lang-zh">${r.metaZh || ''}</span>
+              </div>
+              <ul class="exp-bullets lang-en">${(r.bulletsEn || []).map(b => `<li>${b}</li>`).join('')}</ul>
+              <ul class="exp-bullets lang-zh">${(r.bulletsZh || []).map(b => `<li>${b}</li>`).join('')}</ul>
+            </div>
+          `).join('');
+        }
+      }
+
+      if (Array.isArray(d.awards)) {
+        const al = document.querySelector('#experience .awards-list');
+        if (al) {
+          al.innerHTML = d.awards.map(a => `
+            <li class="award-row">
+              <span class="award-name">
+                <span class="lang-en">${a.nameEn || ''}</span>
+                <span class="lang-zh">${a.nameZh || ''}</span>
+              </span>
+              <span class="award-year">${a.year || ''}</span>
+            </li>
+          `).join('');
+        }
+      }
+    }
+
+    fetch('data/site-data.json?t=' + Date.now())
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (data) renderSiteData(data); })
+      .catch(() => {});
 
     // Language toggle
     const langToggle = document.getElementById('langToggle');

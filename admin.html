@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>学术主页管理后台 | Yichi Ren (yicren66.github.io)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --surface-alt: #f8fafc;
+      --text: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --border: #cbd5e1;
+      --border-light: #e2e8f0;
+      --accent: #1d4ed8;
+      --accent-hover: #1e40af;
+      --accent-soft: #eff6ff;
+      --danger: #dc2626;
+      --danger-soft: #fef2f2;
+      --success: #059669;
+      --success-soft: #ecfdf5;
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    /* Top Bar */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #0f172a;
+      color: #fff;
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .topbar-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .topbar-badge {
+      font-size: 0.75rem;
+      background: rgba(59, 130, 246, 0.25);
+      color: #93c5fd;
+      border: 1px solid rgba(147, 197, 253, 0.35);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: #fff;
+    }
+    .btn-primary:hover { background: #1d4ed8; }
+
+    .btn-success {
+      background: #10b981;
+      color: #fff;
+    }
+    .btn-success:hover { background: #059669; }
+
+    .btn-ghost {
+      background: rgba(255,255,255,0.1);
+      color: #e2e8f0;
+      border-color: rgba(255,255,255,0.2);
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.18); }
+
+    .btn-outline {
+      background: var(--surface);
+      color: var(--text-secondary);
+      border-color: var(--border);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    .btn-danger {
+      background: var(--danger-soft);
+      color: var(--danger);
+      border-color: #fecaca;
+    }
+    .btn-danger:hover { background: #fee2e2; }
+
+    .btn-sm {
+      padding: 4px 10px;
+      font-size: 0.78rem;
+    }
+
+    /* Layout */
+    .layout {
+      max-width: 1240px;
+      margin: 24px auto 64px;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* Left Navigation */
+    .side-nav {
+      position: sticky;
+      top: 84px;
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      padding: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .nav-tab {
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+      transition: all 0.15s ease;
+    }
+
+    .nav-tab:hover {
+      background: var(--surface-alt);
+      color: var(--accent);
+    }
+
+    .nav-tab.active {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .nav-count {
+      font-size: 0.74rem;
+      background: rgba(15, 23, 42, 0.07);
+      padding: 1px 7px;
+      border-radius: 10px;
+    }
+
+    /* Auth Bar */
+    .auth-card {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .auth-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .auth-input {
+      flex: 1;
+      min-width: 260px;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+    }
+
+    .status-banner {
+      display: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-top: 12px;
+    }
+
+    .status-banner.info { display: block; background: var(--accent-soft); color: var(--accent); border: 1px solid #bfdbfe; }
+    .status-banner.success { display: block; background: var(--success-soft); color: var(--success); border: 1px solid #a7f3d0; }
+    .status-banner.error { display: block; background: var(--danger-soft); color: var(--danger); border: 1px solid #fecaca; }
+
+    /* Editor Panels */
+    .panel {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .panel-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 12px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    input[type="text"], input[type="email"], select, textarea {
+      width: 100%;
+      padding: 8px 11px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      font-family: inherit;
+      font-size: 0.86rem;
+      color: var(--text);
+      background: #fff;
+      transition: border-color 0.15s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 76px;
+    }
+
+    .mono-textarea {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+    }
+
+    .item-card {
+      background: var(--surface-alt);
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 16px;
+    }
+
+    .item-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    .item-card-title {
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--accent);
+    }
+
+    .item-card-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .help-tip {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    .upload-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      border: 1px dashed var(--border);
+      padding: 8px 12px;
+      border-radius: 8px;
+    }
+
+    details.guide-details {
+      margin-top: 10px;
+      background: var(--surface-alt);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.82rem;
+    }
+
+    details.guide-details summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+      .side-nav { position: static; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-title">⚙️ 学术主页可视化管理后台</div>
+      <span class="topbar-badge">yicren66/yicren66.github.io</span>
+    </div>
+    <div class="topbar-actions">
+      <a class="btn btn-ghost" href="index.html" target="_blank">👀 查看主页</a>
+      <button class="btn btn-ghost" onclick="exportJson()">📥 导出备份</button>
+      <label class="btn btn-ghost" style="margin:0; cursor:pointer;">
+        📤 导入 JSON <input type="file" accept=".json" style="display:none" onchange="importJson(event)" />
+      </label>
+      <button class="btn btn-success" id="saveGithubBtn" onclick="saveToGitHub()">
+        💾 保存并发布到 GitHub
+      </button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- Left Tabs -->
+    <aside class="side-nav">
+      <button class="nav-tab active" onclick="switchTab('profile', this)">
+        <span>👤 基本信息与文件</span>
+      </button>
+      <button class="nav-tab" onclick="switchTab('about', this)">
+        <span>📝 个人简介与方向</span>
+      </button>
+      <button class="nav-tab" onclick="switchTab('news', this)">
+        <span>📢 近期动态 (News)</span>
+        <span class="nav-count" id="cnt-news">0</span>
+      </button>
+      <button class="nav-tab" onclick="switchTab('publications', this)">
+        <span>📚 学术论文 (Papers)</span>
+        <span class="nav-count" id="cnt-publications">0</span>
+      </button>
+      <button class="nav-tab" onclick="switchTab('patents', this)">
+        <span>🛡️ 专利与软著 (IP)</span>
+        <span class="nav-count" id="cnt-patents">0</span>
+      </button>
+      <button class="nav-tab" onclick="switchTab('research', this)">
+        <span>🔬 科研项目经历</span>
+        <span class="nav-count" id="cnt-research">0</span>
+      </button>
+      <button class="nav-tab" onclick="switchTab('experience', this)">
+        <span>🏆 实习与竞赛荣誉</span>
+        <span class="nav-count" id="cnt-awards">0</span>
+      </button>
+    </aside>
+
+    <!-- Right Content -->
+    <div>
+      <!-- GitHub Token Auth Box -->
+      <div class="auth-card">
+        <div class="auth-row">
+          <strong style="font-size:0.86rem;">🔑 GitHub 授权 Token：</strong>
+          <input type="password" id="ghToken" class="auth-input" placeholder="粘贴您的 GitHub Personal Access Token (ghp_... 或 github_pat_...)" />
+          <button class="btn btn-outline btn-sm" onclick="saveTokenLocal()">记住 Token</button>
+          <button class="btn btn-outline btn-sm" onclick="clearTokenLocal()">清除</button>
+        </div>
+        <details class="guide-details">
+          <summary>💡 首次使用：如何花 30 秒获取您的专属 GitHub Token？（仅您本人可修改网站）</summary>
+          <ol style="margin-top:8px; padding-left:20px; color:var(--text-secondary); display:flex; flex-direction:column; gap:4px;">
+            <li>点击打开 GitHub 官方设置页：<a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener"><strong>Fine-grained personal access tokens</strong></a> → 点击右上角 <strong>Generate new token</strong>。</li>
+            <li><strong>Token name</strong> 随便填（如 <code>homepage-admin</code>），<strong>Expiration</strong> 选择有效期（如 90 days 或 Custom）。</li>
+            <li><strong>Repository access</strong> 选择 <strong>Only select repositories</strong> → 勾选 <code>yicren66/yicren66.github.io</code>。</li>
+            <li>展开下方 <strong>Permissions → Repository permissions</strong> → 找到 <strong>Contents</strong>，将权限改为 <strong>Read and write</strong>。</li>
+            <li>滑到底部点击 <strong>Generate token</strong>，复制生成的 <code>github_pat_...</code> 粘贴到上方输入框并点击“记住 Token”。（Token 仅保存在您当前浏览器的本地存储中，不会上传到代码仓库，外人访问此页面无法修改您的主页！）</li>
+          </ol>
+        </details>
+        <div id="statusBanner" class="status-banner"></div>
+      </div>
+
+      <!-- Panel 1: Profile -->
+      <section id="panel-profile" class="panel active">
+        <div class="panel-header">
+          <div class="panel-title">👤 基本信息、头像与简历管理</div>
+        </div>
+        <div id="profileForm"></div>
+      </section>
+
+      <!-- Panel 2: About -->
+      <section id="panel-about" class="panel">
+        <div class="panel-header">
+          <div class="panel-title">📝 个人简介 (Biography) 与研究方向</div>
+        </div>
+        <div id="aboutForm"></div>
+      </section>
+
+      <!-- Panel 3: News -->
+      <section id="panel-news" class="panel">
+        <div class="panel-header">
+          <div class="panel-title">📢 近期动态 (Recent News)</div>
+          <button class="btn btn-primary btn-sm" onclick="addNews()">+ 新增动态</button>
+        </div>
+        <div id="newsList"></div>
+      </section>
+
+      <!-- Panel 4: Publications -->
+      <section id="panel-publications" class="panel">
+        <div class="panel-header">
+          <div class="panel-title">📚 学术论文 (Publications)</div>
+          <button class="btn btn-primary btn-sm" onclick="addPublication()">+ 新增论文</button>
+        </div>
+        <div id="publicationsList"></div>
+      </section>
+
+      <!-- Panel 5: Patents & IP -->
+      <section id="panel-patents" class="panel">
+        <div class="panel-header">
+          <div class="panel-title">🛡️ 专利与软件著作权 (Patents &amp; Software Copyrights)</div>
+          <button class="btn btn-primary btn-sm" onclick="addPatent()">+ 新增专利/软著</button>
+        </div>
+        <div id="patentsList"></div>
+      </section>
+
+      <!-- Panel 6: Research Experience -->
+      <section id="panel-research" class="panel">
+        <div class="panel-header">
+          <div class="panel-title">🔬 科研项目经历 (Research Experience)</div>
+          <button class="btn btn-primary btn-sm" onclick="addResearch()">+ 新增科研项目</button>
+        </div>
+        <div id="researchList"></div>
+      </section>
+
+      <!-- Panel 7: Internship & Awards -->
+      <section id="panel-experience" class="panel">
+        <div class="panel-header">
+          <div class="panel-title">🏆 企业实习与获奖荣誉 (Internships &amp; Honors)</div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-outline btn-sm" onclick="addInternship()">+ 新增实习经历</button>
+            <button class="btn btn-primary btn-sm" onclick="addAward()">+ 新增奖项荣誉</button>
+          </div>
+        </div>
+        <h3 style="margin-bottom:10px; font-size:0.95rem;">企业实习经历</h3>
+        <div id="internshipsList"></div>
+        <h3 style="margin:20px 0 10px; font-size:0.95rem;">竞赛获奖与荣誉称号</h3>
+        <div id="awardsList"></div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const REPO_OWNER = 'yicren66';
+    const REPO_NAME = 'yicren66.github.io';
+    const DATA_PATH = 'data/site-data.json';
+
+    let siteData = null;
+
+    function showStatus(msg, type = 'info') {
+      const el = document.getElementById('statusBanner');
+      el.className = 'status-banner ' + type;
+      el.innerHTML = msg;
+    }
+
+    function saveTokenLocal() {
+      const val = document.getElementById('ghToken').value.trim();
+      if (!val) return showStatus('请先输入 GitHub Token', 'error');
+      localStorage.setItem('yicren66_gh_token', val);
+      showStatus('✓ Token 已保存在当前浏览器本地存储中', 'success');
+    }
+
+    function clearTokenLocal() {
+      localStorage.removeItem('yicren66_gh_token');
+      document.getElementById('ghToken').value = '';
+      showStatus('已清除本地保存的 Token', 'info');
+    }
+
+    function switchTab(name, btn) {
+      document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-' + name).classList.add('active');
+    }
+
+    function esc(str) {
+      return (str || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function updateCounts() {
+      if (!siteData) return;
+      document.getElementById('cnt-news').textContent = (siteData.news || []).length;
+      document.getElementById('cnt-publications').textContent = (siteData.publications || []).length;
+      document.getElementById('cnt-patents').textContent = (siteData.patents || []).length;
+      document.getElementById('cnt-research').textContent = (siteData.research || []).length;
+      document.getElementById('cnt-awards').textContent = (siteData.awards || []).length;
+    }
+
+    function renderAllEditors() {
+      if (!siteData) return;
+      updateCounts();
+      renderProfileEditor();
+      renderAboutEditor();
+      renderNewsEditor();
+      renderPublicationsEditor();
+      renderPatentsEditor();
+      renderResearchEditor();
+      renderExperienceEditor();
+    }
+
+    // 1. Profile Editor
+    function renderProfileEditor() {
+      const p = siteData.profile || (siteData.profile = {});
+      const stats = p.stats || (p.stats = [
+        { num: '2+1', labelEn: 'Papers', labelZh: '学术论文' },
+        { num: '3', labelEn: 'Patent & IP', labelZh: '专利/软著' },
+        { num: 'Top 19%', labelEn: 'GPA 3.3/4', labelZh: '专业排名' }
+      ]);
+
+      document.getElementById('profileForm').innerHTML = `
+        <div class="form-grid">
+          <div class="form-group">
+            <label>英文姓名 (Name)</label>
+            <input type="text" value="${esc(p.name)}" oninput="siteData.profile.name=this.value" />
+          </div>
+          <div class="form-group">
+            <label>中文姓名</label>
+            <input type="text" value="${esc(p.nameCn)}" oninput="siteData.profile.nameCn=this.value" />
+          </div>
+          <div class="form-group">
+            <label>英文身份/专业 (Role EN)</label>
+            <input type="text" value="${esc(p.roleEn)}" oninput="siteData.profile.roleEn=this.value" />
+          </div>
+          <div class="form-group">
+            <label>中文身份/专业 (Role ZH)</label>
+            <input type="text" value="${esc(p.roleZh)}" oninput="siteData.profile.roleZh=this.value" />
+          </div>
+          <div class="form-group">
+            <label>学校英文名称 (University EN)</label>
+            <input type="text" value="${esc(p.univEn)}" oninput="siteData.profile.univEn=this.value" />
+          </div>
+          <div class="form-group">
+            <label>学校中文名称 (University ZH)</label>
+            <input type="text" value="${esc(p.univZh)}" oninput="siteData.profile.univZh=this.value" />
+          </div>
+          <div class="form-group">
+            <label>就读时间段 (Period)</label>
+            <input type="text" value="${esc(p.period)}" oninput="siteData.profile.period=this.value" />
+          </div>
+          <div class="form-group">
+            <label>联系邮箱 (Email)</label>
+            <input type="text" value="${esc(p.email)}" oninput="siteData.profile.email=this.value" />
+          </div>
+          <div class="form-group">
+            <label>所在地英文 (Location EN)</label>
+            <input type="text" value="${esc(p.locationEn)}" oninput="siteData.profile.locationEn=this.value" />
+          </div>
+          <div class="form-group">
+            <label>所在地中文 (Location ZH)</label>
+            <input type="text" value="${esc(p.locationZh)}" oninput="siteData.profile.locationZh=this.value" />
+          </div>
+          <div class="form-group">
+            <label>外语成绩展示 (Language Score)</label>
+            <input type="text" value="${esc(p.languageScore)}" oninput="siteData.profile.languageScore=this.value" />
+          </div>
+          <div class="form-group">
+            <label>GitHub 主页链接</label>
+            <input type="text" value="${esc(p.github)}" oninput="siteData.profile.github=this.value" />
+          </div>
+          <div class="form-group full">
+            <label>技术栈标签（用英文逗号 , 分隔）</label>
+            <input type="text" value="${esc((p.skills || []).join(', '))}" oninput="siteData.profile.skills=this.value.split(',').map(s=>s.trim()).filter(Boolean)" />
+          </div>
+        </div>
+
+        <h4 style="margin: 16px 0 10px; font-size:0.9rem;">📊 左侧栏 3 个统计数字卡片</h4>
+        <div class="form-grid" style="grid-template-columns: repeat(3, 1fr);">
+          ${stats.map((s, i) => `
+            <div class="item-card" style="margin-bottom:0;">
+              <div class="form-group">
+                <label>核心数值 #${i+1}</label>
+                <input type="text" value="${esc(s.num)}" oninput="siteData.profile.stats[${i}].num=this.value" />
+              </div>
+              <div class="form-group">
+                <label>英文标签</label>
+                <input type="text" value="${esc(s.labelEn)}" oninput="siteData.profile.stats[${i}].labelEn=this.value" />
+              </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label>中文标签</label>
+                <input type="text" value="${esc(s.labelZh)}" oninput="siteData.profile.stats[${i}].labelZh=this.value" />
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+        <h4 style="margin: 20px 0 10px; font-size:0.9rem;">📤 直接上传并替换头像或简历 PDF（将直接上传至 GitHub 仓库）</h4>
+        <div class="form-grid">
+          <div class="upload-box">
+            <div style="flex:1;">
+              <div style="font-weight:600; font-size:0.84rem;">更新个人头像 (assets/img/avatar.png)</div>
+              <div class="help-tip">选择 PNG/JPG 图片后自动上传到 GitHub</div>
+            </div>
+            <input type="file" accept="image/*" onchange="uploadAssetFile(event, 'assets/img/avatar.png', 'avatarUrl')" />
+          </div>
+          <div class="upload-box">
+            <div style="flex:1;">
+              <div style="font-weight:600; font-size:0.84rem;">更新个人简历 (assets/pdf/CV-RenYichi.pdf)</div>
+              <div class="help-tip">选择最新 PDF 简历后直接覆盖线上简历</div>
+            </div>
+            <input type="file" accept=".pdf" onchange="uploadAssetFile(event, 'assets/pdf/CV-RenYichi.pdf', 'cvUrl')" />
+          </div>
+        </div>
+      `;
+    }
+
+    // 2. About Editor
+    function renderAboutEditor() {
+      const ab = siteData.about || (siteData.about = { paragraphsEn: [], paragraphsZh: [], interests: [] });
+      document.getElementById('aboutForm').innerHTML = `
+        <div class="form-group">
+          <label>英文个人简介段落（每段之间用空行分隔，支持 &lt;strong&gt; 加粗与 &lt;em&gt; 斜体）</label>
+          <textarea rows="6" oninput="siteData.about.paragraphsEn=this.value.split(/\\n\\s*\\n/).map(s=>s.trim()).filter(Boolean)">${esc((ab.paragraphsEn || []).join('\n\n'))}</textarea>
+        </div>
+        <div class="form-group">
+          <label>中文个人简介段落（每段之间用空行分隔，支持 &lt;strong&gt; 加粗与 &lt;em&gt; 斜体）</label>
+          <textarea rows="6" oninput="siteData.about.paragraphsZh=this.value.split(/\\n\\s*\\n/).map(s=>s.trim()).filter(Boolean)">${esc((ab.paragraphsZh || []).join('\n\n'))}</textarea>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin: 18px 0 10px;">
+          <h4 style="font-size:0.92rem;">🎯 研究兴趣方向卡片 (Research Interests)</h4>
+          <button class="btn btn-outline btn-sm" onclick="siteData.about.interests.push({titleEn:'New Area',titleZh:'新方向',descEn:'',descZh:''});renderAboutEditor()">+ 新增研究方向</button>
+        </div>
+        ${(ab.interests || []).map((it, i) => `
+          <div class="item-card">
+            <div class="item-card-header">
+              <span class="item-card-title">方向 #${i+1}</span>
+              <button class="btn btn-danger btn-sm" onclick="siteData.about.interests.splice(${i},1);renderAboutEditor()">🗑 删除</button>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>方向名称 (EN)</label>
+                <input type="text" value="${esc(it.titleEn)}" oninput="siteData.about.interests[${i}].titleEn=this.value" />
+              </div>
+              <div class="form-group">
+                <label>方向名称 (中文)</label>
+                <input type="text" value="${esc(it.titleZh)}" oninput="siteData.about.interests[${i}].titleZh=this.value" />
+              </div>
+              <div class="form-group">
+                <label>关键词描述 (EN)</label>
+                <input type="text" value="${esc(it.descEn)}" oninput="siteData.about.interests[${i}].descEn=this.value" />
+              </div>
+              <div class="form-group">
+                <label>关键词描述 (中文)</label>
+                <input type="text" value="${esc(it.descZh)}" oninput="siteData.about.interests[${i}].descZh=this.value" />
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      `;
+    }
+
+    // 3. News Editor
+    function renderNewsEditor() {
+      const list = siteData.news || (siteData.news = []);
+      document.getElementById('newsList').innerHTML = list.map((n, i) => `
+        <div class="item-card">
+          <div class="item-card-header">
+            <span class="item-card-title">动态 #${i+1} (${esc(n.date)})</span>
+            <div class="item-card-actions">
+              <button class="btn btn-outline btn-sm" onclick="moveItem(siteData.news,${i},-1)">↑ 上移</button>
+              <button class="btn btn-outline btn-sm" onclick="moveItem(siteData.news,${i},1)">↓ 下移</button>
+              <button class="btn btn-danger btn-sm" onclick="siteData.news.splice(${i},1);renderAllEditors()">🗑 删除</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>年月标签 (如 2026.08)</label>
+            <input type="text" style="max-width:180px;" value="${esc(n.date)}" oninput="siteData.news[${i}].date=this.value" />
+          </div>
+          <div class="form-group">
+            <label>英文动态内容 (支持 &lt;strong&gt; 加粗和 &lt;a href="..."&gt; 链接)</label>
+            <textarea rows="2" oninput="siteData.news[${i}].contentEn=this.value">${esc(n.contentEn)}</textarea>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label>中文动态内容</label>
+            <textarea rows="2" oninput="siteData.news[${i}].contentZh=this.value">${esc(n.contentZh)}</textarea>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addNews() {
+      const now = new Date();
+      const ym = now.getFullYear() + '.' + String(now.getMonth() + 1).padStart(2, '0');
+      siteData.news.unshift({
+        date: ym,
+        contentEn: 'New update...',
+        contentZh: '新增动态内容……'
+      });
+      renderAllEditors();
+    }
+
+    // 4. Publications Editor
+    function renderPublicationsEditor() {
+      const list = siteData.publications || (siteData.publications = []);
+      document.getElementById('publicationsList').innerHTML = list.map((pub, i) => `
+        <div class="item-card">
+          <div class="item-card-header">
+            <span class="item-card-title">论文 #${i+1}: ${esc(pub.title).slice(0, 55)}...</span>
+            <div class="item-card-actions">
+              <button class="btn btn-outline btn-sm" onclick="moveItem(siteData.publications,${i},-1)">↑ 上移</button>
+              <button class="btn btn-outline btn-sm" onclick="moveItem(siteData.publications,${i},1)">↓ 下移</button>
+              <button class="btn btn-danger btn-sm" onclick="siteData.publications.splice(${i},1);renderAllEditors()">🗑 删除</button>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label>论文标题 (Title)</label>
+              <input type="text" value="${esc(pub.title)}" oninput="siteData.publications[${i}].title=this.value" />
+            </div>
+            <div class="form-group full">
+              <label>作者列表 (用 &lt;strong&gt;Yichi REN&lt;/strong&gt; 高亮本人姓名)</label>
+              <input type="text" value="${esc(pub.authorsHtml)}" oninput="siteData.publications[${i}].authorsHtml=this.value" />
+            </div>
+            <div class="form-group">
+              <label>标签 1 文字 (如 Agriculture (JCR Q1) · Published)</label>
+              <input type="text" value="${esc(pub.badge1)}" oninput="siteData.publications[${i}].badge1=this.value" />
+            </div>
+            <div class="form-group">
+              <label>标签 1 颜色样式</label>
+              <select onchange="siteData.publications[${i}].badge1Type=this.value">
+                <option value="badge-q1" ${pub.badge1Type==='badge-q1'?'selected':''}>🟢 绿色 (JCR Q1 / 核心高亮)</option>
+                <option value="badge-conf" ${pub.badge1Type==='badge-conf'?'selected':''}>🔵 蓝色 (会议 / First Author)</option>
+                <option value="badge-prep" ${pub.badge1Type==='badge-prep'?'selected':''}>🟡 黄色 (在研 / In Preparation)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>标签 2 文字 (如 First Author)</label>
+              <input type="text" value="${esc(pub.badge2)}" oninput="siteData.publications[${i}].badge2=this.value" />
+            </div>
+            <div class="form-group">
+              <label>标签 2 颜色样式</label>
+              <select onchange="siteData.publications[${i}].badge2Type=this.value">
+                <option value="badge-conf" ${pub.badge2Type==='badge-conf'?'selected':''}>🔵 蓝色 (First Author / 领域)</option>
+                <option value="badge-q1" ${pub.badge2Type==='badge-q1'?'selected':''}>🟢 绿色 (JCR Q1 / 高亮)</option>
+                <option value="badge-prep" ${pub.badge2Type==='badge-prep'?'selected':''}>🟡 黄色 (在研)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>期刊/会议与状态说明 (Venue)</label>
+              <input type="text" value="${esc(pub.venue)}" oninput="siteData.publications[${i}].venue=this.value" />
+            </div>
+            <div class="form-group">
+              <label>DOI 或论文外链 URL (选填)</label>
+              <input type="text" value="${esc(pub.doiUrl)}" oninput="siteData.publications[${i}].doiUrl=this.value" />
+            </div>
+            <div class="form-group">
+              <label>配图路径 (Thumb Path)</label>
+              <input type="text" id="pub-thumb-${i}" value="${esc(pub.thumb)}" oninput="siteData.publications[${i}].thumb=this.value" />
+            </div>
+            <div class="form-group">
+              <label>或者直接上传新配图至 GitHub</label>
+              <input type="file" accept="image/*" onchange="uploadPubThumb(event, ${i})" />
+            </div>
+            <div class="form-group full" style="margin-bottom:0;">
+              <label>BibTeX 引用代码</label>
+              <textarea class="mono-textarea" rows="5" oninput="siteData.publications[${i}].bibtex=this.value">${esc(pub.bibtex)}</textarea>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addPublication() {
+      siteData.publications.unshift({
+        id: 'pub_' + Date.now(),
+        thumb: 'assets/img/pub-apple-mobilenetv4.png',
+        badge1: 'Journal / Conference 2026',
+        badge1Type: 'badge-q1',
+        badge2: 'First Author',
+        badge2Type: 'badge-conf',
+        title: 'New Paper Title',
+        authorsHtml: '<strong>Yichi REN</strong>, Co-author Name',
+        venue: 'Published in ..., 2026',
+        doiUrl: '',
+        bibtex: '@article{ren2026new,\n  title={New Paper Title},\n  author={Ren, Yichi},\n  year={2026}\n}'
+      });
+      renderAllEditors();
+    }
+
+    // 5. Patents Editor
+    function renderPatentsEditor() {
+      const list = siteData.patents || (siteData.patents = []);
+      document.getElementById('patentsList').innerHTML = list.map((pt, i) => `
+        <div class="item-card">
+          <div class="item-card-header">
+            <span class="item-card-title">专利/软著 #${i+1}: ${esc(pt.titleZh || pt.titleEn)}</span>
+            <div class="item-card-actions">
+              <button class="btn btn-outline btn-sm" onclick="moveItem(siteData.patents,${i},-1)">↑ 上移</button>
+              <button class="btn btn-outline btn-sm" onclick="moveItem(siteData.patents,${i},1)">↓ 下移</button>
+              <button class="btn btn-danger btn-sm" onclick="siteData.patents.splice(${i},1);renderAllEditors()">🗑 删除</button>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>英文名称 (Title EN)</label>
+              <input type="text" value="${esc(pt.titleEn)}" oninput="siteData.patents[${i}].titleEn=this.value" />
+            </div>
+            <div class="form-group">
+              <label>中文名称 (Title ZH)</label>
+              <input type="text" value="${esc(pt.titleZh)}" oninput="siteData.patents[${i}].titleZh=this.value" />
+            </div>
+            <div class="form-group full">
+              <label>专利号 / 软著登记号与日期 (Code)</label>
+              <input type="text" value="${esc(pt.code)}" oninput="siteData.patents[${i}].code=this.value" />
+            </div>
+            <div class="form-group full">
+              <label>英文简介说明 (Description EN)</label>
+              <textarea rows="2" oninput="siteData.patents[${i}].descEn=this.value">${esc(pt.descEn)}</textarea>
+            </div>
+            <div class="form-group full" style="margin-bottom:0;">
+              <label>中文简介说明 (Description ZH)</label>
+              <textarea rows="2" oninput="siteData.patents[${i}].descZh=this.value">${esc(pt.descZh)}</textarea>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addPatent() {
+      siteData.patents.unshift({
+        titleEn: 'New Patent / Software Copyright',
+        titleZh: '新专利或软件著作权名称',
+        code: 'No. 2026SRxxxxxxx · 2026',
+        descEn: 'Description in English...',
+        descZh: '专利或软著中文描述……'
+      });
+      renderAllEditors();
+    }
+
+    // 6. Research Experience Editor
+    function renderResearchEditor() {
+      const list = siteData.research || (siteData.research = []);
+      document.getElementById('researchList').innerHTML = list.map((r, i) => `
+        <div class="item-card">
+          <div class="item-card-header">
+            <span class="item-card-title">科研项目 #${i+1}: ${esc(r.titleZh || r.titleEn)}</span>
+            <div class="item-card-actions">
+              <button class="btn btn-outline btn-sm" onclick="moveItem(siteData.research,${i},-1)">↑ 上移</button>
+              <button class="btn btn-outline btn-sm" onclick="moveItem(siteData.research,${i},1)">↓ 下移</button>
+              <button class="btn btn-danger btn-sm" onclick="siteData.research.splice(${i},1);renderAllEditors()">🗑 删除</button>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>项目英文名称</label>
+              <input type="text" value="${esc(r.titleEn)}" oninput="siteData.research[${i}].titleEn=this.value" />
+            </div>
+            <div class="form-group">
+              <label>项目中文名称</label>
+              <input type="text" value="${esc(r.titleZh)}" oninput="siteData.research[${i}].titleZh=this.value" />
+            </div>
+            <div class="form-group">
+              <label>起止时间 (Period)</label>
+              <input type="text" value="${esc(r.period)}" oninput="siteData.research[${i}].period=this.value" />
+            </div>
+            <div class="form-group">
+              <label>角色与指导老师 (EN)</label>
+              <input type="text" value="${esc(r.metaEn)}" oninput="siteData.research[${i}].metaEn=this.value" />
+            </div>
+            <div class="form-group full">
+              <label>角色与指导老师 (中文)</label>
+              <input type="text" value="${esc(r.metaZh)}" oninput="siteData.research[${i}].metaZh=this.value" />
+            </div>
+            <div class="form-group full">
+              <label>英文工作要点（每行一条 bullet）</label>
+              <textarea rows="4" oninput="siteData.research[${i}].bulletsEn=this.value.split('\\n').map(s=>s.trim()).filter(Boolean)">${esc((r.bulletsEn || []).join('\n'))}</textarea>
+            </div>
+            <div class="form-group full" style="margin-bottom:0;">
+              <label>中文工作要点（每行一条 bullet）</label>
+              <textarea rows="4" oninput="siteData.research[${i}].bulletsZh=this.value.split('\\n').map(s=>s.trim()).filter(Boolean)">${esc((r.bulletsZh || []).join('\n'))}</textarea>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addResearch() {
+      siteData.research.unshift({
+        titleEn: 'New Research Project',
+        titleZh: '新科研项目名称',
+        period: '2026 – Present',
+        metaEn: 'Supervised by Prof. ...',
+        metaZh: '指导教师：……',
+        bulletsEn: ['Point 1...'],
+        bulletsZh: ['工作内容要点 1……']
+      });
+      renderAllEditors();
+    }
+
+    // 7. Internships & Awards Editor
+    function renderExperienceEditor() {
+      const ints = siteData.internships || (siteData.internships = []);
+      document.getElementById('internshipsList').innerHTML = ints.map((r, i) => `
+        <div class="item-card">
+          <div class="item-card-header">
+            <span class="item-card-title">实习 #${i+1}: ${esc(r.titleZh || r.titleEn)}</span>
+            <div class="item-card-actions">
+              <button class="btn btn-danger btn-sm" onclick="siteData.internships.splice(${i},1);renderAllEditors()">🗑 删除</button>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>公司英文名称</label>
+              <input type="text" value="${esc(r.titleEn)}" oninput="siteData.internships[${i}].titleEn=this.value" />
+            </div>
+            <div class="form-group">
+              <label>公司中文名称</label>
+              <input type="text" value="${esc(r.titleZh)}" oninput="siteData.internships[${i}].titleZh=this.value" />
+            </div>
+            <div class="form-group">
+              <label>实习时间段</label>
+              <input type="text" value="${esc(r.period)}" oninput="siteData.internships[${i}].period=this.value" />
+            </div>
+            <div class="form-group">
+              <label>岗位与地点 (EN)</label>
+              <input type="text" value="${esc(r.metaEn)}" oninput="siteData.internships[${i}].metaEn=this.value" />
+            </div>
+            <div class="form-group full">
+              <label>岗位与地点 (中文)</label>
+              <input type="text" value="${esc(r.metaZh)}" oninput="siteData.internships[${i}].metaZh=this.value" />
+            </div>
+            <div class="form-group full">
+              <label>英文实习内容（每行一条）</label>
+              <textarea rows="3" oninput="siteData.internships[${i}].bulletsEn=this.value.split('\\n').map(s=>s.trim()).filter(Boolean)">${esc((r.bulletsEn || []).join('\n'))}</textarea>
+            </div>
+            <div class="form-group full" style="margin-bottom:0;">
+              <label>中文实习内容（每行一条）</label>
+              <textarea rows="3" oninput="siteData.internships[${i}].bulletsZh=this.value.split('\\n').map(s=>s.trim()).filter(Boolean)">${esc((r.bulletsZh || []).join('\n'))}</textarea>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      const aws = siteData.awards || (siteData.awards = []);
+      document.getElementById('awardsList').innerHTML = aws.map((a, i) => `
+        <div class="item-card">
+          <div class="item-card-header">
+            <span class="item-card-title">奖项 #${i+1} (${esc(a.year)})</span>
+            <div class="item-card-actions">
+              <button class="btn btn-outline btn-sm" onclick="moveItem(siteData.awards,${i},-1)">↑ 上移</button>
+              <button class="btn btn-outline btn-sm" onclick="moveItem(siteData.awards,${i},1)">↓ 下移</button>
+              <button class="btn btn-danger btn-sm" onclick="siteData.awards.splice(${i},1);renderAllEditors()">🗑 删除</button>
+            </div>
+          </div>
+          <div class="form-grid" style="grid-template-columns: 1fr 1fr 120px; margin-bottom:0;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label>奖项英文名称 (支持 &lt;strong&gt; 加粗)</label>
+              <input type="text" value="${esc(a.nameEn)}" oninput="siteData.awards[${i}].nameEn=this.value" />
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>奖项中文名称</label>
+              <input type="text" value="${esc(a.nameZh)}" oninput="siteData.awards[${i}].nameZh=this.value" />
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>获奖年份</label>
+              <input type="text" value="${esc(a.year)}" oninput="siteData.awards[${i}].year=this.value" />
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addInternship() {
+      siteData.internships.unshift({
+        titleEn: 'Company Name',
+        titleZh: '企业中文名称',
+        period: '2026',
+        metaEn: 'Intern Role · City',
+        metaZh: '实习岗位 · 城市',
+        bulletsEn: ['Achievement 1...'],
+        bulletsZh: ['实习成果 1……']
+      });
+      renderAllEditors();
+    }
+
+    function addAward() {
+      siteData.awards.unshift({
+        nameEn: '<strong>First Prize</strong>, Competition Name',
+        nameZh: '竞赛或荣誉名称 <strong>一等奖</strong>',
+        year: '2026'
+      });
+      renderAllEditors();
+    }
+
+    function moveItem(arr, idx, dir) {
+      const target = idx + dir;
+      if (target < 0 || target >= arr.length) return;
+      const tmp = arr[idx];
+      arr[idx] = arr[target];
+      arr[target] = tmp;
+      renderAllEditors();
+    }
+
+    // Export / Import JSON
+    function exportJson() {
+      const blob = new Blob([JSON.stringify(siteData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'site-data.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importJson(ev) {
+      const file = ev.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          siteData = JSON.parse(reader.result);
+          renderAllEditors();
+          showStatus('✓ 已成功导入 JSON 数据，点击右上角“保存并发布到 GitHub”即可生效', 'success');
+        } catch (e) {
+          showStatus('JSON 格式解析失败: ' + e.message, 'error');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // GitHub API Helpers
+    function utf8ToBase64(str) {
+      const bytes = new TextEncoder().encode(str);
+      let bin = '';
+      for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+      return btoa(bin);
+    }
+
+    async function githubPutFile(path, base64Content, commitMsg) {
+      const token = document.getElementById('ghToken').value.trim();
+      if (!token) {
+        throw new Error('请先在上方输入框填写您的 GitHub Personal Access Token！');
+      }
+      const apiUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`;
+      const headers = {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/vnd.github+json'
+      };
+
+      // Get current file SHA if exists
+      let sha = undefined;
+      const getRes = await fetch(apiUrl + '?t=' + Date.now(), { headers });
+      if (getRes.ok) {
+        const meta = await getRes.json();
+        sha = meta.sha;
+      }
+
+      const body = {
+        message: commitMsg,
+        content: base64Content
+      };
+      if (sha) body.sha = sha;
+
+      const putRes = await fetch(apiUrl, {
+        method: 'PUT',
+        headers: { ...headers, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      if (!putRes.ok) {
+        const err = await putRes.json().catch(() => ({}));
+        throw new Error(err.message || `GitHub API HTTP ${putRes.status}`);
+      }
+      return await putRes.json();
+    }
+
+    async function saveToGitHub() {
+      const btn = document.getElementById('saveGithubBtn');
+      const oldText = btn.textContent;
+      try {
+        btn.disabled = true;
+        btn.textContent = '⏳ 正在同步到 GitHub...';
+        showStatus('正在将最新数据提交到 GitHub 仓库 yicren66/yicren66.github.io...', 'info');
+        const jsonStr = JSON.stringify(siteData, null, 2);
+        await githubPutFile(DATA_PATH, utf8ToBase64(jsonStr), 'Update academic homepage data via Web Admin');
+        localStorage.setItem('yicren66_gh_token', document.getElementById('ghToken').value.trim());
+        showStatus('🎉 保存并发布成功！GitHub Pages 正在自动刷新，约 20~30 秒后刷新主页即可看到最新内容。', 'success');
+      } catch (e) {
+        showStatus('❌ 发布失败：' + e.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = oldText;
+      }
+    }
+
+    async function uploadAssetFile(ev, targetPath, profileField) {
+      const file = ev.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          const base64 = reader.result.split(',')[1];
+          showStatus(`⏳ 正在上传文件 ${file.name} 到 ${targetPath}...`, 'info');
+          await githubPutFile(targetPath, base64, `Upload ${targetPath} via Web Admin`);
+          if (profileField && siteData.profile) {
+            siteData.profile[profileField] = targetPath + '?v=' + Date.now();
+          }
+          showStatus(`✓ 文件 ${targetPath} 上传成功！别忘了点击右上角“保存并发布到 GitHub”保存配置。`, 'success');
+        } catch (e) {
+          showStatus('❌ 文件上传失败：' + e.message, 'error');
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function uploadPubThumb(ev, idx) {
+      const file = ev.target.files[0];
+      if (!file) return;
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      const targetPath = `assets/img/${safeName}`;
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          const base64 = reader.result.split(',')[1];
+          showStatus(`⏳ 正在上传论文配图 ${safeName}...`, 'info');
+          await githubPutFile(targetPath, base64, `Upload paper thumbnail ${safeName} via Web Admin`);
+          siteData.publications[idx].thumb = targetPath;
+          const inp = document.getElementById('pub-thumb-' + idx);
+          if (inp) inp.value = targetPath;
+          showStatus(`✓ 论文配图已上传至 ${targetPath}！请点击右上角“保存并发布到 GitHub”。`, 'success');
+        } catch (e) {
+          showStatus('❌ 配图上传失败：' + e.message, 'error');
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedToken = localStorage.getItem('yicren66_gh_token');
+      if (savedToken) document.getElementById('ghToken').value = savedToken;
+
+      fetch(DATA_PATH + '?t=' + Date.now())
+        .then(r => r.json())
+        .then(data => {
+          siteData = data;
+          renderAllEditors();
+        })
+        .catch(err => {
+          showStatus('加载 data/site-data.json 失败：' + err.message, 'error');
+        });
+    });
+  </script>
+</body>
+</html>

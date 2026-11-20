@@ -1,0 +1,258 @@
+{
+  "profile": {
+    "name": "Yichi Ren",
+    "nameCn": "任奕驰",
+    "roleEn": "B.S. in Computer Science & Technology",
+    "roleZh": "计算机科学与技术 · 本科在读",
+    "univEn": "Northwest A&F University (985 / 211)",
+    "univZh": "西北农林科技大学 信息工程学院 (985 / 211)",
+    "period": "Sep 2023 – Jul 2027",
+    "locationEn": "Yangling, Shaanxi, China",
+    "locationZh": "中国 · 陕西杨凌",
+    "email": "yicren@outlook.com",
+    "github": "https://github.com/yicren66",
+    "githubDisplay": "github.com/yicren66",
+    "languageScore": "IELTS 6.5 (R 7.5, L 7.0) · CET-6",
+    "avatarUrl": "assets/img/avatar.png",
+    "cvUrl": "assets/pdf/CV-RenYichi.pdf",
+    "stats": [
+      { "num": "2+1", "labelEn": "Papers", "labelZh": "学术论文" },
+      { "num": "3", "labelEn": "Patent & IP", "labelZh": "专利/软著" },
+      { "num": "Top 19%", "labelEn": "GPA 3.3/4", "labelZh": "专业排名" }
+    ],
+    "skills": [
+      "PyTorch", "MobileNetV4", "YOLOv8", "PointNet++", "Transformer",
+      "XGBoost", "OpenCV", "Python", "C/C++", "FastAPI",
+      "Spring Boot", "Vue 3", "Neo4j", "LLM Fine-Tuning"
+    ]
+  },
+  "about": {
+    "paragraphsEn": [
+      "I am a senior undergraduate student in the <strong>College of Information Engineering</strong> at <strong>Northwest A&F University</strong> (Project 985 & 211), pursuing a B.S. in Computer Science and Technology (GPA: <strong>3.3/4.0</strong>, 83.07/100, Rank: <strong>top 19.35%</strong>; Grade A in <em>Probability & Statistics</em>, A- in <em>Advanced Mathematics</em>, <em>Linear Algebra</em>, <em>C Programming</em>, and <em>Operating Systems</em>).",
+      "My research focuses on <strong>lightweight and transferable computer vision</strong>, <strong>3D point cloud perception</strong>, <strong>few-sample learning</strong>, and <strong>end-to-end intelligent systems</strong> across smart agriculture and industrial visual inspection. I have authored papers as first author in <em>Agriculture</em> (JCR Q1, under review) and <em>Proc. SPIE (MVDL 2026)</em>, co-invented a national patent, and led two national software copyrights. Previously, I also worked as a Data Development Intern at <strong>Taibao Technology (China Pacific Insurance Group)</strong> in Shanghai, focusing on financial LLM benchmarks and domain fine-tuning."
+    ],
+    "paragraphsZh": [
+      "我是<strong>西北农林科技大学</strong>（国家 985 / 211 工程高校）信息工程学院计算机科学与技术专业 2023 级本科生（GPA：<strong>3.3/4.0</strong>，加权平均分 83.07，专业排名前 <strong>19.35%</strong>；概率论与数理统计 A，高等数学、线性代数、C 语言程序设计、操作系统均为 A-）。",
+      "我的研究兴趣聚焦于<strong>轻量化与可迁移计算机视觉</strong>、<strong>三维点云分割与配准</strong>、<strong>小样本高维特征学习</strong>以及面向智慧农业与工业质检的<strong>端到端智能系统</strong>。本科期间以第一作者在 <em>Proc. SPIE (MVDL 2026)</em> 发表论文、在 JCR 一区期刊 <em>Agriculture</em> 投稿在审论文 1 篇，申请国家专利 1 项并获批国家计算机软件著作权 2 项；同时曾在上海<strong>太保科技有限公司（中国太平洋保险集团）</strong>大数据服务集群担任数据开发实习生，负责金融保险领域大模型评测基准构建与微调优化。"
+    ],
+    "interests": [
+      {
+        "titleEn": "Lightweight & Edge Vision",
+        "titleZh": "轻量化视觉与边缘部署",
+        "descEn": "MobileNetV4, YOLOv8, fine-grained lesion & industrial defect detection",
+        "descZh": "MobileNetV4、YOLOv8、细粒度病害与工业缺陷检测"
+      },
+      {
+        "titleEn": "3D Point Cloud Analysis",
+        "titleZh": "三维点云配准与感知",
+        "descEn": "SAC-IA & ICP registration, PointNet++, semantic-prototype 3D segmentation",
+        "descZh": "SAC-IA 与 ICP 配准、PointNet++、三维语义分割与非接触估重"
+      },
+      {
+        "titleEn": "Time-Series & LLM Systems",
+        "titleZh": "时序预测与领域知识图谱/LLM",
+        "descEn": "TimeXer–TCN–BiLSTM forecasting, Neo4j Knowledge Graphs, RAG & LLM benchmarks",
+        "descZh": "TimeXer–TCN–BiLSTM 气象预测、Neo4j 知识图谱问答与大模型微调"
+      }
+    ]
+  },
+  "news": [
+    {
+      "date": "2026.07",
+      "contentEn": "Joined the <strong>Smart Greenhouse Environmental Monitoring & Temperature Forecasting</strong> project, designing a 168-hour horizon <em>TimeXer–TCN–BiLSTM–Attention</em> forecasting pipeline and FastAPI/CMADaaS meteorological platform.",
+      "contentZh": "参与<strong>智能温室环境监测、温度预测与智能决策支持系统</strong>研发，负责气象数据工程与 168 小时 <em>TimeXer–TCN–BiLSTM–Attention</em> 预测流水线。"
+    },
+    {
+      "date": "2026.06",
+      "contentEn": "Our first-author manuscript <strong>MobileNetV4ald</strong> for lightweight apple leaf disease recognition in natural orchard scenes is released on HEP Preprint (<a href=\"https://doi.org/10.3868/HEPPreprint20260611.95360\" target=\"_blank\">DOI</a>) and under review at <em>Agriculture</em> (JCR Q1).",
+      "contentZh": "第一作者论文 <strong>MobileNetV4ald</strong>（自然果园场景下轻量化苹果叶片病害识别）上线预印本（<a href=\"https://doi.org/10.3868/HEPPreprint20260611.95360\" target=\"_blank\">DOI</a>），目前在 JCR Q1 期刊 <em>Agriculture</em> 审稿中。"
+    },
+    {
+      "date": "2026.05",
+      "contentEn": "Our first-author paper <em>\"A Modified XGBoost Model for Beef Cattle Body Weight Prediction\"</em> was published in <strong>Proc. SPIE (MVDL 2026)</strong> (<a href=\"https://doi.org/10.1117/12.3121272\" target=\"_blank\">DOI</a>).",
+      "contentZh": "第一作者论文 <em>\"A Modified XGBoost Model for Beef Cattle Body Weight Prediction\"</em> 正式发表于 <strong>Proc. SPIE (MVDL 2026)</strong>（<a href=\"https://doi.org/10.1117/12.3121272\" target=\"_blank\">DOI</a>）。"
+    },
+    {
+      "date": "2026.02",
+      "contentEn": "Granted two National Software Copyrights (<strong>2026SR0316161</strong> & <strong>2026SR0048346</strong>) on 3D point cloud registration and cattle biometric weight prediction, and won <strong>First Prize</strong> in the Collegiate Computer Proficiency Challenge.",
+      "contentZh": "获批两项国家计算机软件著作权（<strong>2026SR0316161</strong>、<strong>2026SR0048346</strong>），并获 2026 大学生计算机能力挑战赛<strong>一等奖</strong>。"
+    },
+    {
+      "date": "2026.01",
+      "contentEn": "Started internship as a <strong>Data Development Intern</strong> in the Big Data Service Cluster at <strong>Taibao Technology Co., Ltd. (China Pacific Insurance Group)</strong> in Shanghai.",
+      "contentZh": "加入上海<strong>太保科技有限公司（中国太平洋保险集团）</strong>大数据服务集群，担任数据开发实习生。"
+    }
+  ],
+  "publications": [
+    {
+      "id": "mobilenetv4ald",
+      "thumb": "assets/img/pub-apple-mobilenetv4.png",
+      "badge1": "Agriculture (JCR Q1) · Under Review",
+      "badge1Type": "badge-q1",
+      "badge2": "First Author",
+      "badge2Type": "badge-conf",
+      "title": "MobileNetV4ald: A Lightweight Model for Apple Leaf Disease Recognition in Natural Orchard Scenes",
+      "authorsHtml": "<strong>Yichi REN</strong>, Mei LI, Yuanyang HUANG, Meili WANG, De HUI, Baotong GUAN",
+      "venue": "Under Review at Agriculture (JCR Q1), 2026 · Preprint DOI: 10.3868/HEPPreprint20260611.95360",
+      "doiUrl": "https://doi.org/10.3868/HEPPreprint20260611.95360",
+      "bibtex": "@article{ren2026mobilenetv4ald,\n  title   = {MobileNetV4ald: A Lightweight Model for Apple Leaf Disease Recognition in Natural Orchard Scenes},\n  author  = {Ren, Yichi and Li, Mei and Huang, Yuanyang and Wang, Meili and Hui, De and Guan, Baotong},\n  journal = {HEP Preprint (Under Review at Agriculture)},\n  year    = {2026},\n  doi     = {10.3868/HEPPreprint20260611.95360},\n  url     = {https://doi.org/10.3868/HEPPreprint20260611.95360}\n}"
+    },
+    {
+      "id": "mvdl2026",
+      "thumb": "assets/img/pub-cattle-xgboost.png",
+      "badge1": "Proc. SPIE (MVDL 2026) · Published",
+      "badge1Type": "badge-conf",
+      "badge2": "First Author",
+      "badge2Type": "badge-q1",
+      "title": "A Modified XGBoost Model for Beef Cattle Body Weight Prediction",
+      "authorsHtml": "<strong>Yichi REN</strong>, Jiaji SONG, Ce FENG, Ye ZHANG, Lvwen HUANG",
+      "venue": "Published in Proceedings of SPIE (MVDL 2026), 2026 · DOI: 10.1117/12.3121272",
+      "doiUrl": "https://doi.org/10.1117/12.3121272",
+      "bibtex": "@inproceedings{ren2026xgboost,\n  title     = {A Modified XGBoost Model for Beef Cattle Body Weight Prediction},\n  author    = {Ren, Yichi and Song, Jiaji and Feng, Ce and Zhang, Ye and Huang, Lvwen},\n  booktitle = {Proceedings of SPIE (MVDL 2026)},\n  year      = {2026},\n  doi       = {10.1117/12.3121272},\n  url       = {https://doi.org/10.1117/12.3121272}\n}"
+    },
+    {
+      "id": "sprnet",
+      "thumb": "assets/img/proj-forestry-meteo.png",
+      "badge1": "Manuscript in Preparation",
+      "badge1Type": "badge-prep",
+      "badge2": "3D Point Cloud",
+      "badge2Type": "badge-conf",
+      "title": "SPRNet: Semantic-Prototype Residual Network Coupling 3D Point Cloud Segmentation with Two-Stage Regression for Tomato Fruit Weight Estimation",
+      "authorsHtml": "Ce FENG, Ye ZHANG, Feiyi WANG, Tianyu ZHU, Lvwen HUANG, Quanbo MOU, <strong>Yichi REN</strong>, Xi LU, Xiaohui HU",
+      "venue": "Manuscript in preparation, 2026",
+      "doiUrl": "",
+      "bibtex": "@unpublished{feng2026sprnet,\n  title  = {SPRNet: Semantic-Prototype Residual Network Coupling 3D Point Cloud Segmentation with Two-Stage Regression for Tomato Fruit Weight Estimation},\n  author = {Feng, Ce and Zhang, Ye and Wang, Feiyi and Zhu, Tianyu and Huang, Lvwen and Mou, Quanbo and Ren, Yichi and Lu, Xi and Hu, Xiaohui},\n  note   = {Manuscript in preparation},\n  year   = {2026}\n}"
+    }
+  ],
+  "patents": [
+    {
+      "titleEn": "Beef Cattle Weighing Station (肉牛称重站)",
+      "titleZh": "肉牛称重站 (Beef Cattle Weighing Station)",
+      "code": "CN 310044483 S · Chinese Patent",
+      "descEn": "<strong>Inventors:</strong> Lvwen Huang, <strong>Yichi Ren</strong>. Developed a highly stable non-contact automated beef cattle weighing station that avoids equipment inaccuracies and safety hazards caused by livestock stress responses, significantly improving animal welfare.",
+      "descZh": "<strong>发明人：</strong>黄铝文，<strong>任奕驰</strong>。设计高稳定性非接触式自动化肉牛称重工作站，有效避免应激反应导致的测量误差与安全隐患，提升动物福利水平。"
+    },
+    {
+      "titleEn": "Local Point Cloud Data Registration and Fusion Processing System V1.0",
+      "titleZh": "局部点云数据配准融合处理系统 V1.0",
+      "code": "No. 2026SR0316161 · Feb 24, 2026",
+      "descEn": "Led the integration of SAC-IA coarse alignment and ICP fine registration experiments; effectively overcomes high noise and fragmentation in 3D point cloud data to achieve stress-free livestock biometric monitoring.",
+      "descZh": "主导 SAC-IA 粗配准与 ICP 精配准实验集成，有效克服三维点云数据高噪声与碎片化问题，实现无应激生物体征监测。"
+    },
+    {
+      "titleEn": "Beef Cattle Point Cloud Body Size and Weight Prediction System V1.0",
+      "titleZh": "肉牛点云体尺与体重预测系统 V1.0",
+      "code": "No. 2026SR0048346 · Jan 18, 2026",
+      "descEn": "Designed a deep neural network integrating PointNet++ and Transformer architectures to achieve high-precision body-size extraction and non-contact weight prediction in modern pasture management.",
+      "descZh": "设计融合 PointNet++ 与 Transformer 的三维深度神经网络，在现代牧场管理场景中实现高精度体尺提取与体重预测。"
+    }
+  ],
+  "research": [
+    {
+      "titleEn": "Smart Greenhouse Environmental Monitoring, Temperature Forecasting & Decision Support System",
+      "titleZh": "智能温室环境监测、温度预测与智能决策支持系统",
+      "period": "Jul 2026 – Present",
+      "metaEn": "Supervised by Dr. Lianghe Xu & Prof. Lvwen Huang · Backend/API, Meteorological Data Engineering, Time-Series & RAG",
+      "metaZh": "指导教师：徐良赫 博士、黄铝文 教授 · 负责后端 API、气象数据工程、时序预测与 RAG 问答",
+      "bulletsEn": [
+        "Developed and deployed a greenhouse tomato decision-support platform integrating indoor/outdoor environmental monitoring, CO₂/light acquisition, weather warnings, 24h/7d forecasts, and web/mini-program API services.",
+        "Built FastAPI/MySQL data pipelines connecting MUSIC/CMADaaS and QWeather with dynamic request signing, scheduled sync, historical backfilling, and HTML/GRIB2/Excel parsing.",
+        "Designed a TimeXer–TCN–BiLSTM–Attention workflow using 168 hours of historical data to predict the next 168 hours, introducing a similar-day strategy for the first 24 hours with model fallback for the 7-day horizon."
+      ],
+      "bulletsZh": [
+        "开发并部署温室番茄智能决策支持平台，集成室内外环境监测、CO₂ 与光照采集、气象预警、24 小时/7 天预报及 Web/小程序 API 服务。",
+        "构建对接国家气象局 MUSIC/CMADaaS 与和风天气的 FastAPI/MySQL 数据管道，实现动态签名、定时同步、历史回填及 HTML/GRIB2/Excel 解析。",
+        "研发基于 168 小时历史序列预测未来 168 小时的 TimeXer–TCN–BiLSTM–Attention 预测模型，提出首日相似日策略与 7 天模型回退机制。"
+      ]
+    },
+    {
+      "titleEn": "Jujube Pest and Disease Intelligent Recognition and Knowledge Graph System",
+      "titleZh": "红枣病虫害智能识别与知识图谱问答系统",
+      "period": "Apr 2026 – Present",
+      "metaEn": "Supervised by Prof. Yanming Nie · Image Recognition, YOLOv8s Workflow, Knowledge Graph & Intelligent Q&A",
+      "metaZh": "指导教师：聂艳明 教授 · 负责图像识别、数据集/模型流水线、知识图谱与前端交互",
+      "bulletsEn": [
+        "Built an agricultural AI software prototype integrating YOLOv8s detection (15 classes covering 7 jujube diseases and 8 insect pests), knowledge graph retrieval, intelligent Q&A, and backend management.",
+        "Collected, annotated, and augmented field imagery via Label Studio; linked recognition outputs with symptoms, occurrence periods, affected plant parts, and treatment recommendations in interactive graph views."
+      ],
+      "bulletsZh": [
+        "构建集图像识别、知识图谱检索、智能问答与后台管理于一体的农业 AI 原型系统，覆盖 7 类红枣病害与 8 类虫害共 15 个目标类别。",
+        "使用 Label Studio 完成农业图像筛选、标注与增强并训练 YOLOv8s 模型；将识别结果与症状、发生期、受害部位及防治建议进行图谱关联与可视化展示。"
+      ]
+    },
+    {
+      "titleEn": "Lightweight Apple Leaf Disease Recognition with MobileNetV4",
+      "titleZh": "基于 MobileNetV4 的轻量化苹果叶片病害识别",
+      "period": "Feb 2026 – Present",
+      "metaEn": "Research Assistant · Supervised by Prof. Mei Li",
+      "metaZh": "科研助理 · 指导教师：李梅 教授",
+      "bulletsEn": [
+        "Developed MobileNetV4ald, a lightweight apple leaf disease recognition architecture tailored for complex natural orchard scenes under constrained computational budgets.",
+        "Significantly reduced parameter count and inference latency to support edge-side deployment on low-power devices, contributing to precision pesticide reduction."
+      ],
+      "bulletsZh": [
+        "研发面向复杂自然果园场景的轻量化苹果叶片病害识别模型 MobileNetV4ald，针对算力受限环境进行架构优化。",
+        "大幅降低模型体积与推理复杂度，支持低功耗边缘设备端侧部署，助力精准减药与绿色农业应用。"
+      ]
+    },
+    {
+      "titleEn": "Beef Cattle Body Weight Prediction with XGBoost-R",
+      "titleZh": "基于 XGBoost-R 的肉牛体重预测研究",
+      "period": "Sep 2024 – Apr 2026",
+      "metaEn": "Scientific & Technological Innovation Training · Supervised by Prof. Lvwen Huang",
+      "metaZh": "科技创新训练项目 · 指导教师：黄铝文 教授",
+      "bulletsEn": [
+        "Developed a hybrid body-weight prediction framework (XGBoost-R) integrating deep-learning high-dimensional feature extraction with XGBoost ensemble regression.",
+        "Designed a combined data augmentation and minority-region densification strategy for small-sample agricultural datasets, improving generalization in complex field environments."
+      ],
+      "bulletsZh": [
+        "提出混合体重预测框架 XGBoost-R，将深度学习高维特征提取与 XGBoost 集成回归相结合以提升预测精度。",
+        "针对小样本农业数据集设计联合数据增强策略，有效改善复杂牧场环境下的模型泛化能力。"
+      ]
+    }
+  ],
+  "internships": [
+    {
+      "titleEn": "China Pacific Insurance (Group) Co., Ltd. — Taibao Technology Co., Ltd.",
+      "titleZh": "中国太平洋保险（集团）股份有限公司 — 太保科技有限公司",
+      "period": "Jan 2026 – Jun 2026",
+      "metaEn": "Data Development Intern, Big Data Service Cluster · Shanghai, China",
+      "metaZh": "数据开发实习生 · 大数据服务集群 · 中国上海",
+      "bulletsEn": [
+        "Processed and refined large-scale, industry-specific datasets to construct evaluation benchmarks for Large Language Models (LLMs) in finance and insurance scenarios.",
+        "Implemented prompt engineering and domain fine-tuning workflows to improve the accuracy, domain specificity, and reliability of LLM outputs in complex business workflows."
+      ],
+      "bulletsZh": [
+        "处理与清洗大规模金融保险行业专有数据集，构建面向垂直业务场景的大语言模型（LLM）评测基准（Benchmarks）。",
+        "实施提示工程（Prompt Engineering）与领域微调策略，显著提升大模型在复杂保险业务场景下的输出准确性、专业度与可靠性。"
+      ]
+    }
+  ],
+  "awards": [
+    {
+      "nameEn": "<strong>First Prize</strong>, Collegiate Computer Proficiency Challenge",
+      "nameZh": "全国大学生计算机能力挑战赛 <strong>一等奖</strong>",
+      "year": "2026"
+    },
+    {
+      "nameEn": "<strong>First Prize</strong>, China Undergraduate Mathematical Modeling Contest (CUMCM)",
+      "nameZh": "全国大学生数学建模竞赛（CUMCM）<strong>一等奖</strong>",
+      "year": "2024"
+    },
+    {
+      "nameEn": "<strong>Third Prize</strong>, National University Student Mathematics Competition",
+      "nameZh": "全国大学生数学竞赛 <strong>三等奖</strong>",
+      "year": "2024"
+    },
+    {
+      "nameEn": "<strong>Outstanding University Student</strong>, Northwest A&F University",
+      "nameZh": "西北农林科技大学 <strong>优秀大学生</strong>",
+      "year": "2024"
+    },
+    {
+      "nameEn": "<strong>Scholarship of Academic Excellence</strong>, Northwest A&F University (×2)",
+      "nameZh": "西北农林科技大学 <strong>专业优秀奖学金</strong>（连续两年）",
+      "year": "2023, 2024"
+    }
+  ]
+}
