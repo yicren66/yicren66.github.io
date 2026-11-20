@@ -1,6 +1,6 @@
-# Yichi Ren (任奕驰) — Academic Homepage (`yicren66.github.io`)
+# Yichi Ren (任一驰) — Academic Homepage (`yicren66.github.io`)
 
-Personal academic homepage for **Yichi Ren (任奕驰)**, undergraduate researcher in Computer Science and Technology at Northwest A&F University.
+Personal academic homepage for **Yichi Ren (任一驰)**, undergraduate researcher in Computer Science and Technology at Northwest A&F University.
 
 - **Live URL**: https://yicren66.github.io
 - **Features**:
